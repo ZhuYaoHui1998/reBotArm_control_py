@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""重力补偿控制演示。
+"""重力补偿控制演示 / Gravity-compensation demo (MIT + feedforward g(q)).
 
-使用 Pinocchio 计算当前关节构型下的广义重力向量 g(q)，
+使用 Pinocchio 计算广义重力 g(q)，
 通过 MIT 模式的前馈力矩直接补偿重力，使机械臂可以在任意姿态下
 "漂浮"，即松开后不会因自重坠落。
 
@@ -30,7 +30,7 @@ from reBotArm_control_py.dynamics import (
 
 
 # --------------------------------------------------------------------------- #
-# 全局控制标志
+# 全局控制标志 / Global run flag
 # --------------------------------------------------------------------------- #
 
 _running = True
@@ -38,7 +38,7 @@ _running = True
 
 def _sigint_handler(signum, frame):
     global _running
-    print("\n[gravity_comp] 收到 Ctrl+C，准备停止...")
+    print("\n[gravity_comp] Ctrl+C, stopping... / 收到 Ctrl+C，准备停止...")
     _running = False
 
 

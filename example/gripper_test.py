@@ -1,4 +1,4 @@
-"""夹爪交互式测试工具。"""
+"""夹爪交互式测试 / Interactive gripper console."""
 import sys
 import time
 from pathlib import Path
@@ -8,14 +8,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from reBotArm_control_py.actuator import Gripper
 
 HELP = """
-夹爪交互测试
+Gripper test / 夹爪交互测试
 -----------
-z  - 设零
-m  - 切换控制模式 (MIT / POS_VEL / VEL)
-c  - 发送控制指令
-s  - 显示当前状态
-h  - 显示帮助
-q  - 停止循环 → 失能 → 退出
+z  - zero / 设零
+m  - mode MIT POS_VEL VEL / 切换模式
+c  - send command / 发送指令
+s  - state / 状态
+h  - help / 帮助
+q  - stop loop → disable → quit / 停止→失能→退出
 """
 
 
@@ -23,7 +23,7 @@ class GripperTerminal:
     def __init__(self):
         self.g = Gripper()
         self.g.enable()
-        print(f"使能完成，当前模式: {self.g.mode}")
+        print(f"enabled, mode / 使能完成: {self.g.mode}")
         self._show_state()
 
         self._target_pos = 0.0
@@ -32,7 +32,7 @@ class GripperTerminal:
 
         self._running = True
         self.g.start_control_loop(self._loop, rate=100.0)
-        print(f"控制循环已启动 {self.g._rate} Hz")
+        print(f"control loop started / 循环已启动 {self.g._rate} Hz")
 
     def _loop(self, gripper, dt: float):
         if self.g.mode == "mit":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""机械臂零点校准 + 实时角度监控(失能状态)。"""
+"""机械臂零点校准 + 实时角度监控（失能）/ Zero all joints and stream angles (disabled holding)."""
 import time
 from pathlib import Path
 
@@ -18,11 +18,11 @@ def mit_controller(ref, dt):
 
 arm = RobotArm()
 arm.connect()
-print("--- 连接成功 ---")
+print("--- connected / 连接成功 ---")
 arm.set_zero()
-print("--- 零点已设置 ---\n")
+print("--- zero set / 零点已设置 ---\n")
 
-print("\n--- 实时角度（deg）Ctrl+C 退出 ---\n")
+print("\n--- live angles (deg), Ctrl+C to quit / 实时角度 Ctrl+C 退出 ---\n")
 arm.start_control_loop(mit_controller)
 try:
     while True:

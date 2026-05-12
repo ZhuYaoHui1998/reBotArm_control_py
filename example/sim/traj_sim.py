@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""测地线轨迹规划仿真 — 笛卡尔测地线 + CLIK 跟踪。
+"""轨迹仿真 — SE(3) geodesic + CLIK / Cartesian traj planning demo.
 
-用法:
+用法 / Usage:
     python example/sim/traj_sim.py
 
 交互:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""逆运动学仿真 — 交互式输入目标位姿 + MeshCat 实时可视化。
+"""IK 仿真 + MeshCat / Interactive IK with visualization.
 
-用法:
+用法 / Usage:
     uv run python example/sim/ik_sim.py
 
 控制:

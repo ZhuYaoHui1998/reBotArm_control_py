@@ -1,4 +1,4 @@
-"""MeshCat 仿真模块 — 交互式可视化正逆运动学。"""
+"""MeshCat 仿真 — 交互式 FK/IK 可视化 / Interactive FK/IK visualization."""
 
 from .visualizer import Visualizer
 

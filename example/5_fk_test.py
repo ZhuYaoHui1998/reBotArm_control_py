@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""reBotArm 正运动学数据测试
+"""reBotArm 正运动学测试 / Forward kinematics console test.
 
-用法:
+用法 / Usage:
   python example/5_fk_test.py
 
 输入: 6 个关节角度，单位：度，空格分隔

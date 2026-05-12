@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""reBotArm MIT 弹簧阻尼位置控制
+"""reBotArm MIT 弹簧阻尼位置控制 / MIT impedance-style position hold.
 
-用法:
+用法 / Usage:
     python example/3_mit_control.py
 
 输入: n 个关节角度（度），空格分隔

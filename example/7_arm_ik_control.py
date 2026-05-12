@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""ArmEndPos 交互控制示例（IK 模式）。
+"""ArmEndPos 交互示例（IK）/ Interactive IK snap-to-pose.
 
-用法:
+用法 / Usage:
     python example/7_arm_ik_control.py
 
 输入:

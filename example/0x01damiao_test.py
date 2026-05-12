@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """单电机控制测试 — 直接使用 motorbridge SDK。
 
+English: Interactive single-motor test via motorbridge (MIT / POS_VEL / VEL).
+
 用法:
     python example/0x01damiao_test.py
 

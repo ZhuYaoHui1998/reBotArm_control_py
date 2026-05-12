@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""MeshCat 可视化器封装 — 加载 URDF 并显示机器人模型。
+"""MeshCat 可视化封装 — URDF 场景 / MeshCat URDF visualizer helper.
 
-用法:
+用法 / Usage:
     from example.sim.visualizer import Visualizer
     viz = Visualizer()
     viz.update(q)  # q: 关节角度 (nq,)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""ArmEndPos 交互控制示例（轨迹规划模式）。
+"""ArmEndPos 交互示例（轨迹）/ Interactive planned Cartesian motion.
 
-用法:
+用法 / Usage:
     python example/8_arm_traj_control.py
 
 输入:

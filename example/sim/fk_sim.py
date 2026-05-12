@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""正运动学仿真 — 交互式关节角度控制 + MeshCat 实时可视化。
+"""FK 仿真 + MeshCat / Interactive FK with live visualization.
 
-用法:
+用法 / Usage:
     python example/sim/fk_sim.py
 
 控制:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""reBotArm POS_VEL 位置速度控制
+"""reBotArm POS_VEL 位置速度控制 / POS_VEL PI position+velocity loops.
 
-用法:
+用法 / Usage:
     python example/4_pos_vel_control.py
 
 输入: n 个关节角度（度），空格分隔

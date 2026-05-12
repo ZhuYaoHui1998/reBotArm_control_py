@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""reBotArm 逆运动学数据测试
+"""reBotArm 逆运动学测试 / Inverse kinematics console test.
 
-用法:
+用法 / Usage:
   python example/6_ik_test.py
 
 输入: 末端期望位置 (x y z)，单位：米
