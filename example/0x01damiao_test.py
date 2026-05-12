@@ -27,6 +27,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from motorbridge import Controller, Mode
+from reBotArm_control_py.actuator import is_dm_serial_channel
 
 CHANNEL = "/dev/ttyACM0"         
 MOTOR_ID = 0x01
@@ -44,10 +45,11 @@ def main() -> None:
     signal.signal(signal.SIGTERM, signal_handler)
 
     print(f"连接到 {CHANNEL} ...")
-    if CHANNEL.startswith("/dev/tty"):
-        ctrl = Controller.from_dm_serial(CHANNEL, 921600)
+    ch = CHANNEL.strip()
+    if is_dm_serial_channel(ch):
+        ctrl = Controller.from_dm_serial(ch, 921600)
     else:
-        ctrl = Controller(CHANNEL)
+        ctrl = Controller(ch)
     motor = ctrl.add_damiao_motor(MOTOR_ID, FEEDBACK_ID, MODEL)
     print(f"电机已注册: id={MOTOR_ID:#04x} feedback={FEEDBACK_ID:#04x} model={MODEL}")
 
