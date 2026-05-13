@@ -58,7 +58,7 @@ class GripperTerminal:
                 continue
 
             if cmd == "q":
-                print("停止控制循环 → 失能 → 退出...")
+                print("停止控制循环 → 失能 → 退出... / stop loop → disable → exit...")
                 self.g.stop_control_loop()
                 self.g.disable()
                 self.g.disconnect()
@@ -72,23 +72,23 @@ class GripperTerminal:
                 self._show_state()
 
             elif cmd == "z":
-                print("设零...")
+                print("设零... / zeroing...")
                 self.g.set_zero()
 
             elif cmd == "m":
-                print(f"当前模式: {self.g.mode}，切换到: [0]MIT  [1]POS_VEL  [2]VEL")
+                print(f"当前模式 / mode: {self.g.mode}，切换到 / switch: [0]MIT  [1]POS_VEL  [2]VEL")
                 sel = input("  > ").strip()
                 if sel == "0":
                     self.g.mode_mit()
-                    print("已切换到 MIT")
+                    print("已切换到 MIT / switched to MIT")
                 elif sel == "1":
                     self.g.mode_pos_vel()
-                    print("已切换到 POS_VEL")
+                    print("已切换到 POS_VEL / switched to POS_VEL")
                 elif sel == "2":
                     self.g.mode_vel()
-                    print("已切换到 VEL")
+                    print("已切换到 VEL / switched to VEL")
                 else:
-                    print("无效选择")
+                    print("无效选择 / invalid choice")
 
             elif cmd == "c":
                 if self.g.mode == "mit":
@@ -97,27 +97,27 @@ class GripperTerminal:
                         v = float(input("  vel (rad/s) [0.0]: ").strip() or "0.0")
                         tau = float(input("  tau (Nm) [0.0]: ").strip() or "0.0")
                         self._target_pos, self._target_vel, self._mit_tau = p, v, tau
-                        print(f"已更新: pos={p}, vel={v}, tau={tau}")
+                        print(f"已更新 / updated: pos={p}, vel={v}, tau={tau}")
                     except ValueError:
-                        print("输入无效")
+                        print("输入无效 / invalid input")
                 elif self.g.mode == "pos_vel":
                     try:
                         p = float(input("  pos (rad): ").strip() or "0.0")
                         self._target_pos = p
-                        print(f"已更新: pos={p}")
+                        print(f"已更新 / updated: pos={p}")
                     except ValueError:
-                        print("输入无效")
+                        print("输入无效 / invalid input")
                 elif self.g.mode == "vel":
                     try:
                         v = float(input("  vel (rad/s): ").strip() or "0.0")
                         self._target_vel = v
-                        print(f"已更新: vel={v}")
+                        print(f"已更新 / updated: vel={v}")
                     except ValueError:
-                        print("输入无效")
+                        print("输入无效 / invalid input")
                 self._show_state()
 
             else:
-                print(f"未知指令: {cmd}，按 h 查看帮助")
+                print(f"未知指令 / unknown cmd: {cmd}，按 h 查看帮助 / press h for help")
 
 
 if __name__ == "__main__":

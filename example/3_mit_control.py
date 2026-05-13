@@ -4,13 +4,14 @@
 用法 / Usage:
     python example/3_mit_control.py
 
-输入: n 个关节角度（度），空格分隔
-示例:
+输入 / Input: n joint angles in degrees, space-separated
+示例 / Examples:
     0 0 0 0 0 0
     10 -20 30 -40 50 60
-    10 -20 30 -40 50 60 120 8   # 末尾可附加 kp kd 覆盖 yaml
+    10 -20 30 -40 50 60 120 8   # 末尾可附加 kp kd 覆盖 yaml / optional trailing kp kd override YAML
 
 MIT 模式: 力矩 = kp*(目标-当前) + kd*(0-当前速度)
+/ MIT: tau = kp*(q_des - q) + kd*(0 - qdot)
 """
 from pathlib import Path
 import sys
@@ -29,11 +30,11 @@ def mit_controller(ref: RobotArm, dt: float) -> None:
 
 
 arm.connect()
-print("--- 连接成功 ---")
+print("--- 连接成功 / connected ---")
 arm.enable()
-print("--- 使能成功 ---")
+print("--- 使能成功 / motors enabled ---")
 arm.mode_mit()
-print("--- MIT 模式 ---\n")
+print("--- MIT 模式 / MIT mode ---\n")
 
 n = arm.num_joints
 target_pos = np.zeros(n)
@@ -41,8 +42,8 @@ mit_kp = np.array([j.kp for j in arm._joints], dtype=np.float64)
 mit_kd = np.array([j.kd for j in arm._joints], dtype=np.float64)
 
 arm.start_control_loop(mit_controller)
-print(f"关节数: {n} | 第1个关节电机 kp: {mit_kp[0]:.1f} | kd: {mit_kd[0]:.1f} | {arm._rate}Hz")
-print("输入 n 个角度(度) q退出 state查看状态\n")
+print(f"关节数 / joints: {n} | 第1个关节电机 kp / motor1 kp: {mit_kp[0]:.1f} | kd: {mit_kd[0]:.1f} | {arm._rate}Hz")
+print("输入 n 个角度(度) / enter n angles (deg); q quit; state / q退出 state查看状态\n")
 
 while True:
     try:
@@ -64,7 +65,7 @@ while True:
 
     tokens = line.split()
     if len(tokens) < n:
-        print(f"需要 {n} 个值")
+        print(f"需要 {n} 个值 / need {n} values")
         continue
 
     pos_deg = [float(x) for x in tokens[:n]]

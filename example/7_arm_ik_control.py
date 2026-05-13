@@ -4,11 +4,11 @@
 用法 / Usage:
     python example/7_arm_ik_control.py
 
-输入:
-    x y z [roll pitch yaw]   目标末端位置（米 / 弧度）
-    q / quit / exit          退出
-    state                    当前状态
-    pos                      当前末端位置
+输入 / Input:
+    x y z [roll pitch yaw]   目标末端位置（米 / 弧度）/ target EE pose (m, rad)
+    q / quit / exit          退出 / quit
+    state                    当前状态 / joint & target state
+    pos                      当前末端位置 / EE pose from FK
 """
 
 import sys
@@ -24,7 +24,7 @@ def main() -> None:
     Arm_endpos_control = ArmEndPos(arm)
 
     Arm_endpos_control.start()
-    print("--- 已启动末端位置控制器 ---\n")
+    print("--- 已启动末端位置控制器 / End-effector controller started ---\n")
 
     while True:
         try:
@@ -39,8 +39,8 @@ def main() -> None:
 
         if line.lower() == "state":
             q, _, _ = arm.get_state()
-            print(f"  当前关节 (rad): {[f'{v:+.3f}' for v in q]}")
-            print(f"  目标关节 (rad): {[f'{v:+.3f}' for v in Arm_endpos_control._q_target]}")
+            print(f"  当前关节 (rad) / joints: {[f'{v:+.3f}' for v in q]}")
+            print(f"  目标关节 (rad) / target q: {[f'{v:+.3f}' for v in Arm_endpos_control._q_target]}")
             continue
 
         if line.lower() == "end_state":
@@ -55,7 +55,7 @@ def main() -> None:
         try:
             vals = [float(v) for v in line.split()]
         except ValueError:
-            print("  格式: x y z [roll pitch yaw]")
+            print("  格式 / format: x y z [roll pitch yaw]")
             continue
 
         x, y, z = vals[0], vals[1], vals[2]
@@ -69,7 +69,7 @@ def main() -> None:
               f"{'ok' if ok else 'fail'}")
 
     Arm_endpos_control.end()
-    print("\n完成。")
+    print("\n完成。/ Done.")
 
 
 if __name__ == "__main__":

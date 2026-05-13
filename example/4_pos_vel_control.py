@@ -4,13 +4,14 @@
 用法 / Usage:
     python example/4_pos_vel_control.py
 
-输入: n 个关节角度（度），空格分隔
-示例:
+输入 / Input: n joint angles in degrees, space-separated
+示例 / Examples:
     0 0 0 0 0 0
     10 -20 30 -40 50 60
-    10 -20 30 -40 50 60 5.0   # 末尾可附加 vlim 覆盖 yaml
+    10 -20 30 -40 50 60 5.0   # 末尾可附加 vlim 覆盖 yaml / optional trailing vlim overrides YAML
 
 POS_VEL 模式: PI 位置环 + PI 速度环
+/ POS_VEL: cascaded PI position + PI velocity loops
 """
 from pathlib import Path
 import sys
@@ -28,19 +29,19 @@ def pos_vel_controller(ref: RobotArm, dt: float) -> None:
 
 
 arm.connect()
-print("--- 连接成功 ---")
+print("--- 连接成功 / connected ---")
 arm.enable()
-print("--- 使能成功 ---")
+print("--- 使能成功 / motors enabled ---")
 arm.mode_pos_vel()
-print("--- POS_VEL 模式 ---\n")
+print("--- POS_VEL 模式 / POS_VEL mode ---\n")
 
 n = arm.num_joints
 target_pos = np.zeros(n)
 pv_vlim = np.array([j.vlim for j in arm._joints], dtype=np.float64)
 
 arm.start_control_loop(pos_vel_controller)
-print(f"关节数: {n} | vlim: {pv_vlim[0]:.2f} rad/s | {arm._rate}Hz")
-print("输入 n 个角度(度) q退出 state查看状态\n")
+print(f"关节数 / joints: {n} | vlim: {pv_vlim[0]:.2f} rad/s | {arm._rate}Hz")
+print("输入 n 个角度(度) / n angles (deg); q quit; state / q退出 state查看状态\n")
 
 while True:
     try:
@@ -62,7 +63,7 @@ while True:
 
     tokens = line.split()
     if len(tokens) < n:
-        print(f"需要 {n} 个值")
+        print(f"需要 {n} 个值 / need {n} values")
         continue
 
     pos_deg = [float(x) for x in tokens[:n]]

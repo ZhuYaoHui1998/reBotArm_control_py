@@ -4,11 +4,11 @@
 用法 / Usage:
     python example/8_arm_traj_control.py
 
-输入:
-    x y z [roll pitch yaw] [duration]   目标末端位置（米 / 弧度 / 秒）
-    q / quit / exit                     退出
-    state                               当前状态
-    pos                                 当前末端位置
+输入 / Input:
+    x y z [roll pitch yaw] [duration]   目标末端（米 / 弧度 / 秒）/ target pose & duration (s)
+    q / quit / exit                     退出 / quit
+    state                               当前状态 / status
+    pos                                 当前末端位置 / EE pose
 """
 
 import sys
@@ -24,7 +24,7 @@ def main() -> None:
     Arm_endpos_control = ArmEndPos(arm)
 
     Arm_endpos_control.start()
-    print("--- 已启动末端位置控制器 ---\n")
+    print("--- 已启动末端位置控制器 / End-effector controller started ---\n")
 
     while True:
         try:
@@ -39,7 +39,7 @@ def main() -> None:
 
         if line.lower() == "state":
             q, _, _ = arm.get_state()
-            print(f"  当前关节 (rad): {[f'{v:+.3f}' for v in q]}")
+            print(f"  当前关节 (rad) / joints: {[f'{v:+.3f}' for v in q]}")
             print(f"  moving: {Arm_endpos_control._moving}  "
                   f"traj_pts: {len(Arm_endpos_control._traj)}  "
                   f"idx: {Arm_endpos_control._traj_idx}")
@@ -57,7 +57,7 @@ def main() -> None:
         try:
             vals = [float(v) for v in line.split()]
         except ValueError:
-            print("  格式: x y z [roll pitch yaw] [duration]")
+            print("  格式 / format: x y z [roll pitch yaw] [duration]")
             continue
 
         x, y, z = vals[0], vals[1], vals[2]
@@ -75,7 +75,7 @@ def main() -> None:
               f"T={duration:.1f}s  {'ok' if ok else 'fail'}")
 
     Arm_endpos_control.end()
-    print("\n完成。")
+    print("\n完成。/ Done.")
 
 
 if __name__ == "__main__":

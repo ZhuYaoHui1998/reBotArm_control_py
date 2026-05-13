@@ -4,16 +4,16 @@
 用法 / Usage:
     python example/sim/traj_sim.py
 
-交互:
-    输入: x y z [roll pitch yaw]  (米 / 弧度)
-    直接回车使用默认配置
-    输入 q 退出
+交互 / Interactive:
+    输入 / input: x y z [roll pitch yaw]  (米 / 弧度 / m, rad)
+    空行忽略 / Blank line ignored
+    输入 q 退出 / q to quit
 
-功能:
-    - 从当前关节角出发，输入目标位姿
-    - 使用 SE(3) 测地线插值 + CLIK 关节空间跟踪
-    - 计算并显示轨迹统计信息
-    - 在 MeshCat 中回放完整轨迹
+功能 / Features:
+    - 从当前关节角出发，输入目标位姿 / from current q to target pose
+    - 使用 SE(3) 测地线插值 + CLIK 关节空间跟踪 / SE(3) geodesic + CLIK tracking
+    - 计算并显示轨迹统计信息 / trajectory stats
+    - 在 MeshCat 中回放完整轨迹 / MeshCat playback
 """
 
 import sys
@@ -64,7 +64,7 @@ def _solve_ik(model, end_frame_id, target, q_init, ik_params):
 def run_trajectory(viz, model, end_frame_id, q_start, q_end,
                    duration, dt=1.0/50.0, profile=TrajProfile.MIN_JERK,
                    accel_ratio=0.25, null_gain=0.1):
-    """执行轨迹规划、CLIK 跟踪和动画回放。"""
+    """执行轨迹规划、CLIK 跟踪和 MeshCat 回放 / Plan traj, CLIK track, animate."""
     T_start = compute_fk(model, q_start)[2]
     T_end = compute_fk(model, q_end)[2]
     params = TrajPlanParams(dt=dt, profile=profile, accel_ratio=accel_ratio)
@@ -106,22 +106,22 @@ def run_trajectory(viz, model, end_frame_id, q_start, q_end,
     ]
 
     print(f"\n{'='*60}")
-    print(f"  轨迹: {profile.value}  耗时={elapsed:.1f}ms  点数={len(joint_traj)}")
-    print(f"  时长={duration:.2f}s  dt={dt}s  零空间={null_gain}")
-    print(f"  关节: {np.degrees(q_start).round(1).tolist()} → {np.degrees(q_end).round(1).tolist()}")
+    print(f"  轨迹 / profile: {profile.value}  耗时 / time={elapsed:.1f}ms  点数 / samples={len(joint_traj)}")
+    print(f"  时长 / duration={duration:.2f}s  dt={dt}s  零空间 / null_gain={null_gain}")
+    print(f"  关节 (deg) / joints: {np.degrees(q_start).round(1).tolist()} → {np.degrees(q_end).round(1).tolist()}")
     print(f"{'='*60}")
-    print(f"  IK 成功率: {stats.success_rate:.1%}  "
-          f"最大误差: {stats.max_ik_error:.3e}  "
-          f"平均误差: {stats.avg_ik_error:.3e}")
+    print(f"  IK 成功率 / success: {stats.success_rate:.1%}  "
+          f"最大误差 / max err: {stats.max_ik_error:.3e}  "
+          f"平均误差 / avg err: {stats.avg_ik_error:.3e}")
 
-    # ── MeshCat 回放 ──
+    # ── MeshCat 回放 / MeshCat playback ──
     viz.clear_paths()
     viz.clear_trajectory_line()
     if ee_positions:
         viz.draw_ref_path(ref_positions)
 
     visited = []
-    print("\n  播放动画 (MeshCat)...")
+    print("\n  播放动画 (MeshCat)... / Playing MeshCat animation...")
     for i, pt in enumerate(joint_traj):
         if should_exit:
             break
@@ -131,7 +131,7 @@ def run_trajectory(viz, model, end_frame_id, q_start, q_end,
             viz.draw_actual_path(visited)
         if i < len(times) - 1:
             time.sleep(max(0.002, times[i + 1] - times[i]))
-    print("  动画播放完毕。")
+    print("  动画播放完毕。/ Animation done.")
 
     if not should_exit:
         joint_arr = np.array([pt.q for pt in joint_traj])
@@ -142,14 +142,14 @@ def run_trajectory(viz, model, end_frame_id, q_start, q_end,
         q_deg = np.degrees(joint_arr)
         qv_deg = np.degrees(qv)
 
-        print(f"\n--- 统计摘要 ---")
-        print(f"  关节角度 (deg):")
+        print(f"\n--- 统计摘要 / stats ---")
+        print(f"  关节角度 (deg) / joint angles:")
         for i in range(joint_arr.shape[1]):
             print(f"    j{i+1}: [{q_deg[:, i].min():.1f}, {q_deg[:, i].max():.1f}]")
-        print(f"  关节速度 (deg/s):")
+        print(f"  关节速度 (deg/s) / joint velocities:")
         for i in range(joint_arr.shape[1]):
             print(f"    j{i+1}: [{qv_deg[:, i].min():.1f}, {qv_deg[:, i].max():.1f}]")
-        print(f"  笛卡尔误差 (m): avg={cart_errs.mean():.3e}, max={cart_errs.max():.3e}")
+        print(f"  笛卡尔误差 (m) / Cartesian err: avg={cart_errs.mean():.3e}, max={cart_errs.max():.3e}")
 
     return times, joint_traj, cart_errs, stats
 
@@ -158,19 +158,19 @@ def main():
     global should_exit
     signal.signal(signal.SIGINT, signal_handler)
 
-    print("加载 MeshCat 可视化器...")
+    print("加载 MeshCat 可视化器... / Loading MeshCat...")
     viz = Visualizer(open_browser=True)
     model = viz.model
     end_frame_id = get_end_effector_frame_id(model)
-    print(f"模型: {model.nq} 关节\n")
+    print(f"模型 / model: {model.nq} 关节 / joints\n")
 
     ik_params = IKParams(max_iter=200, tolerance=1e-4, damping=1e-6, step_size=0.8)
     dt = 1.0 / 50.0
     q = pin.neutral(model).copy()
     q_last = q.copy()
     viz.update(q)
-    print("已在零位显示机器人，打开 MeshCat 查看。")
-    print('输入: x y z [roll pitch yaw] (米 / 弧度)，q 退出\n')
+    print("已在零位显示机器人，打开 MeshCat 查看。/ Robot at neutral in MeshCat.")
+    print('输入 / input: x y z [roll pitch yaw] (m, rad); q 退出 / q to quit\n')
 
     while not should_exit:
         T0 = compute_fk(model, q)[2]
@@ -195,7 +195,7 @@ def main():
         try:
             vals = [float(x) for x in parts]
         except ValueError:
-            print("  格式: x y z [roll pitch yaw]")
+            print("  格式 / format: x y z [roll pitch yaw]")
             continue
 
         x, y, z = vals[0], vals[1], vals[2]
@@ -208,7 +208,7 @@ def main():
             model, end_frame_id, target_pose, q_last, ik_params
         )
         if not ik_success:
-            print("  IK 无解\n")
+            print("  IK 无解 / IK failed\n")
             continue
 
         duration = max(1.0, np.linalg.norm(target_pose.translation - T0[:3, 3]) / LINEAR_SPEED)
@@ -220,13 +220,13 @@ def main():
             dt=dt, profile=TrajProfile.MIN_JERK, accel_ratio=0.25, null_gain=0.1,
         )
         ms = (time.time() - t0) * 1000.0
-        print(f"  总耗时: {ms:.1f} ms  点数: {len(joint_traj)}\n")
+        print(f"  总耗时 / total: {ms:.1f} ms  点数 / samples: {len(joint_traj)}\n")
 
         q_last = joint_traj[-1].q.copy()
         viz.update(q_last)
 
     viz.neutral()
-    print("\n完成。")
+    print("\n完成。/ Done.")
 
 
 if __name__ == "__main__":

@@ -4,12 +4,12 @@
 用法 / Usage:
     uv run python example/sim/ik_sim.py
 
-控制:
-    输入目标位置 x y z (米)
-    可选: 姿态 roll pitch yaw (弧度)
-    例: 0.25 0.0 0.15          (仅位置)
-    例: 0.25 0.0 0.15 0 0 0    (位置+姿态)
-    q / quit / exit: 退出
+控制 / Controls:
+    输入目标位置 x y z (米) / target position x y z (m)
+    可选: 姿态 roll pitch yaw (弧度) / optional RPY (rad)
+    例 / ex: 0.25 0.0 0.15          (仅位置 / pos only)
+    例 / ex: 0.25 0.0 0.15 0 0 0    (位置+姿态 / pose)
+    q / quit / exit: 退出 / quit
 """
 
 import sys
@@ -36,21 +36,21 @@ def signal_handler(sig, frame):
 def main():
     signal.signal(signal.SIGINT, signal_handler)
 
-    print("加载可视化器...")
+    print("加载可视化器... / Loading visualizer...")
     viz = Visualizer()
 
     viz.neutral()
 
-    print("MeshCat 已打开. 输入目标位姿:")
-    print("  x y z                      (仅位置，米)")
-    print("  x y z roll pitch yaw       (位置+姿态，弧度)")
-    print("  q/quit/exit: 退出\n")
+    print("MeshCat 已打开. 输入目标位姿: / MeshCat ready. Target pose:")
+    print("  x y z                      (仅位置，米 / m, pos only)")
+    print("  x y z roll pitch yaw       (位置+姿态，弧度 / m + rad)")
+    print("  q/quit/exit: 退出 / quit\n")
 
     while not should_exit:
         time.sleep(0.01)
 
         try:
-            line = input("目标位姿 > ").strip().lower()
+            line = input("目标位姿 / target pose > ").strip().lower()
         except EOFError:
             break
 
@@ -60,24 +60,24 @@ def main():
         try:
             vals = [float(x) for x in line.split()]
             if len(vals) not in (3, 6):
-                print("需要 3 个值（仅位置）或 6 个值（位置+姿态）\n")
+                print("需要 3 或 6 个值 / need 3 or 6 numbers\n")
                 continue
         except ValueError:
-            print("无效输入\n")
+            print("无效输入 / invalid input\n")
             continue
 
-        target_pos = np.array(vals[:3])  # 获取位置
+        target_pos = np.array(vals[:3])  # 位置 / position
         target_rot = None
         if len(vals) == 6:
             r, p, y = vals[3], vals[4], vals[5]
-            target_rot = pin.rpy.rpyToMatrix(r, p, y)  # 获取姿态
+            target_rot = pin.rpy.rpyToMatrix(r, p, y)  # 姿态 / orientation
 
         result = compute_ik(None, target_pos, target_rot)
 
         viz.update(result.q)
-        status = "收敛" if result.success else "未收敛"
-        print(f"  [{status}] 迭代={result.iterations} 误差={result.error:.2e}m")
-        print(f"  关节角度(deg): {np.degrees(result.q)}\n")
+        status = "收敛 converged" if result.success else "未收敛 not converged"
+        print(f"  [{status}] 迭代 / iters={result.iterations} 误差 / err={result.error:.2e}m")
+        print(f"  关节角度(deg) / joints: {np.degrees(result.q)}\n")
 
 
 if __name__ == "__main__":
